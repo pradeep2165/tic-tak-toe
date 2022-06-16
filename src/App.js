@@ -3,7 +3,7 @@ import React, { Component } from "react";
 class Square extends Component {
   render() {
     return (
-      <button className="btn btn-sm btn-outline-secondary m-2 fs-1" style={{ width: "75px", height: "75px" }} onClick={this.props.onClick}>
+      <button className="btn btn-sm btn-outline-info m-2 fs-1" style={{ width: "75px", height: "75px" }} onClick={this.props.onClick}>
         {this.props.value}
       </button>
     );
@@ -70,6 +70,12 @@ export default class App extends Component {
       xIsNext: !this.state.xIsNext,
     });
   }
+  jumpTo(step) {
+    this.setState({
+      stepNumber: step,
+      xIsNext: step % 2 === 0,
+    });
+  }
 
   render() {
     const history = this.state.history;
@@ -78,9 +84,11 @@ export default class App extends Component {
     const moves = history.map((step, move) => {
       const desc = move ? "Go to step #" + move : "Go to start game";
       return (
-        <li key={move}>
-          <button>{desc}</button>
-        </li>
+        <div key={move}>
+          <button className="btn btn-info mb-2" onClick={() => this.jumpTo(move)}>
+            {desc}
+          </button>
+        </div>
       );
     });
     let status;
@@ -93,11 +101,9 @@ export default class App extends Component {
 
     return (
       <div className="container">
-        <div>
+        <div className="col-md-3">
           <Board squares={squares} onClick={(i) => this.handleClick(i)} />
-        </div>
-        <div>
-          <div>{status}</div>
+          <div className="btn btn-primary mb-2">{status}</div>
           <div>{moves}</div>
         </div>
       </div>
