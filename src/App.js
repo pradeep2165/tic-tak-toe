@@ -31,7 +31,6 @@ class Board extends Component {
           {this.renderSquare(7)}
           {this.renderSquare(8)}
         </div>
-        <div>{this.props.status}</div>
       </div>
     );
   }
@@ -61,18 +60,18 @@ export default class App extends Component {
     let status;
     const winner = calculateWinner(this.state.squares);
     if (winner) {
-      status = "Winner" + winner;
+      status = "Winner: " + winner;
     } else {
-      status = "Next turn for " + (this.state.xIsNext ? "X" : "O");
+      status = "Next turn if for: " + (this.state.xIsNext ? "X" : "O");
     }
     return (
       <div className="container">
         <div>
-          <Board status={status} squares={this.state.squares} onClick={(i) => this.handleClick(i)} />
+          <Board squares={this.state.squares} onClick={(i) => this.handleClick(i)} />
         </div>
-        {/* <div>
+        <div>
           <div>{status}</div>
-        </div> */}
+        </div>
       </div>
     );
   }
