@@ -39,38 +39,66 @@ export default class App extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      squares: Array(9).fill(null),
+      history: [
+        {
+          squares: Array(9).fill(null),
+        },
+      ],
+      stepNumber: 0,
       xIsNext: true,
     };
   }
 
   handleClick(i) {
+    const history = this.state.history.slice(0, this.state.stepNumber + 1);
+    const current = history[history.length - 1];
     //clone of current array
-    const squares = this.state.squares.slice();
+    const squares = current.squares.slice();
     //data extry now allowed after winnder and user cant mondify its entry
     if (calculateWinner(squares) || squares[i]) {
       return;
     }
     squares[i] = this.state.xIsNext ? "X" : "O";
     //updated new array with current array
-    this.setState({ squares: squares, xIsNext: !this.state.xIsNext });
+    this.setState({
+      history: history.concat([
+        {
+          squares: squares,
+        },
+      ]),
+      stepNumber: history.length,
+      xIsNext: !this.state.xIsNext,
+    });
   }
 
   render() {
+    const history = this.state.history;
+    const current = history[this.state.stepNumber];
+    const squares = current.squares;
+    const moves = history.map((step, move) => {
+      const desc = move ? "Go to step #" + move : "Go to start game";
+      return (
+        <li key={move}>
+          <button>{desc}</button>
+        </li>
+      );
+    });
     let status;
-    const winner = calculateWinner(this.state.squares);
+    const winner = calculateWinner(squares);
     if (winner) {
       status = "Winner: " + winner;
     } else {
       status = "Next turn if for: " + (this.state.xIsNext ? "X" : "O");
     }
+
     return (
       <div className="container">
         <div>
-          <Board squares={this.state.squares} onClick={(i) => this.handleClick(i)} />
+          <Board squares={squares} onClick={(i) => this.handleClick(i)} />
         </div>
         <div>
           <div>{status}</div>
+          <div>{moves}</div>
         </div>
       </div>
     );
