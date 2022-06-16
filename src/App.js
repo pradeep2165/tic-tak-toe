@@ -10,35 +10,10 @@ class Square extends Component {
   }
 }
 class Board extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      squares: Array(9).fill(null),
-      xIsNext: true,
-    };
-  }
-  handleClick(i) {
-    //clone of current array
-    const squares = this.state.squares.slice();
-    //data extry now allowed after winnder and user cant mondify its entry
-    if (calculateWinner(squares) || squares[i]) {
-      return;
-    }
-    squares[i] = this.state.xIsNext ? "X" : "O";
-    //updated new array with current array
-    this.setState({ squares: squares, xIsNext: !this.state.xIsNext });
-  }
   renderSquare(i) {
-    return <Square value={this.state.squares[i]} onClick={() => this.handleClick(i)} />;
+    return <Square value={this.props.squares[i]} onClick={() => this.props.onClick(i)} />;
   }
   render() {
-    let status;
-    const winner = calculateWinner(this.state.squares);
-    if (winner) {
-      status = "Winner" + winner;
-    } else {
-      status = "Next turn for " + (this.state.xIsNext ? "X" : "O");
-    }
     return (
       <div>
         <div>
@@ -56,16 +31,48 @@ class Board extends Component {
           {this.renderSquare(7)}
           {this.renderSquare(8)}
         </div>
-        <div>{status}</div>
+        <div>{this.props.status}</div>
       </div>
     );
   }
 }
 export default class App extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      squares: Array(9).fill(null),
+      xIsNext: true,
+    };
+  }
+
+  handleClick(i) {
+    //clone of current array
+    const squares = this.state.squares.slice();
+    //data extry now allowed after winnder and user cant mondify its entry
+    if (calculateWinner(squares) || squares[i]) {
+      return;
+    }
+    squares[i] = this.state.xIsNext ? "X" : "O";
+    //updated new array with current array
+    this.setState({ squares: squares, xIsNext: !this.state.xIsNext });
+  }
+
   render() {
+    let status;
+    const winner = calculateWinner(this.state.squares);
+    if (winner) {
+      status = "Winner" + winner;
+    } else {
+      status = "Next turn for " + (this.state.xIsNext ? "X" : "O");
+    }
     return (
       <div className="container">
-        <Board />
+        <div>
+          <Board status={status} squares={this.state.squares} onClick={(i) => this.handleClick(i)} />
+        </div>
+        {/* <div>
+          <div>{status}</div>
+        </div> */}
       </div>
     );
   }
