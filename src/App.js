@@ -1,8 +1,18 @@
 import React, { Component } from "react";
 
 class Square extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      value: null,
+    };
+  }
   render() {
-    return <button style={{ width: "30px", height: "30px", margin: "5px" }}>{this.props.value}</button>;
+    return (
+      <button className="btn btn-sm btn-outline-secondary m-2 fs-1" style={{ width: "75px", height: "75px" }} onClick={() => this.setState({ value: "X" })}>
+        {this.state.value}
+      </button>
+    );
   }
 }
 class Board extends Component {
