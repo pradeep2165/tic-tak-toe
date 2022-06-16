@@ -2,12 +2,12 @@ import React, { Component } from "react";
 
 class Square extends Component {
   render() {
-    return <button style={{ width: "30px", height: "30px", margin: "5px" }}></button>;
+    return <button style={{ width: "30px", height: "30px", margin: "5px" }}>{this.props.value}</button>;
   }
 }
 class Board extends Component {
-  renderSquare() {
-    return <Square />;
+  renderSquare(i) {
+    return <Square value={i} />;
   }
   render() {
     return (
